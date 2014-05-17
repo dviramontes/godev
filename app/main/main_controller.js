@@ -17,9 +17,7 @@ angular.module('godev-main',['ngRoute'])
       zoom: 8
     };
 
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    $scope.about = "lorem ipsum dolor sit amet";
+    
+    $scope.need = "lorem";
   });

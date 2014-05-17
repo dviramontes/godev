@@ -3,26 +3,38 @@
     <h1>HOW THE FUCK DO I GIVE SOME HELP</h1>
   </div>
 
-  <div class="col-md-12">
+  <div class="col-md-12 below">
     <google-map center="map.center" zoom="map.zoom"/>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12 text-center about">
+  <div class="col-md-3">
+    &nbsp;
+  </div>
+  <div class="col-md-6 info below">
+    <h3>About</h3>
     {{about}}
   </div>
-  <div class="col-md-12 text-center">
-    <h3>List</h3>
-    <ul class="list-unstyled">
-      <li ng-repeat="need in needs">
-        {{need}}
-      </li>
-    </ul>
+    <div class="col-md-3">
+    &nbsp;
   </div>
 </div>
 
 <div class="row">
+    <div class="col-md-3">
+    &nbsp;
+  </div>
+  <div class="col-md-6 info below">
+    <h3>Needs</h3>
+      {{need}}
+  </div>
+    <div class="col-md-3">
+    &nbsp;
+  </div>
+</div>
+
+<div class="row below">
   <div class="col-md-4">
     <button class="form-control btn">
       help
