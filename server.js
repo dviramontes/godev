@@ -1,10 +1,15 @@
 var sendgridAuth = require('./config');
 var mongoose = require('mongoose');
 var mongodb = require('./config').api.mongodb;
-
+var restify = require('restify');
 
 var Ticket = require('./models/ticket');
 
+var server = restify.createServer({
+	name: 'GovDev'
+});
+
+server.listen()
 
 // mongoose.connect('mongodb://'+ mongodb.user +':'+ mongodb.pass+'@'+ mongodb.url);
 mongoose.connect('mongodb://'+ mongodb.url);
@@ -22,6 +27,12 @@ var api_user = sendgridAuth.api.sendgrid.username;
 var api_key = sendgridAuth.api.sendgrid.password;
 
 var sendgrid = require('sendgrid')(api_user, api_key);
+
+
+server.get(/.*/, restify.serveStatic({
+    'directory': './build',
+    'default': 'index.html'
+}));
 
 // sendgrid.send({
 //     to: 'dviramontes@gmail.com',
