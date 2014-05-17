@@ -15,6 +15,6 @@
     "karma-jasmine": "^0.1.5"
   },
   "dependencies": {
-    "sendgrid": "^1.0.3"
+    "twilio-js": "^0.1.1"
   }
 }
