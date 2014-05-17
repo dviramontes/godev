@@ -15,6 +15,7 @@
     "karma-jasmine": "^0.1.5"
   },
   "dependencies": {
-    "twilio-js": "^0.1.1"
+    "twilio-js": "^0.1.1",
+    "twilio": "^1.6.0"
   }
 }
