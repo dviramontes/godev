@@ -10,7 +10,11 @@ Challenge
  - Web app for setting up profile and listing needs via phone?
  - Share socially to get word about needs out quickly
 
-Google Sign In
---------------
+Google
+------
 
-user18.team18@govchal00.com
+sign in as user18.team18@govchal00.com
+
+have to use one API from https://console.developers.google.com/
+
+should probably use app engine
