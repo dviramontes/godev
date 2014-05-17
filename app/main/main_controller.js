@@ -1,36 +1,25 @@
 'use strict';
 
-angular.module('godev-main', ['ngRoute'])
-    .directive('addthisToolbox', function() {
-        return {
-            restrict: 'A',
-            transclude: true,
-            replace: true,
-            template: '<div ng-transclude></div>',
-            link: function($scope, element, attrs) {
-                // Dynamically init for performance reason
-                // Safe for multiple calls, only first call will be processed (loaded css/images, popup injected)
-                // http://support.addthis.com/customer/portal/articles/381263-addthis-client-api#configuration-url
-                // http://support.addthis.com/customer/portal/articles/381221-optimizing-addthis-performance
-                addthis.init();
-                // Ajax load (bind events)
-                // http://support.addthis.com/customer/portal/articles/381263-addthis-client-api#rendering-js-toolbox
-                // http://support.addthis.com/customer/portal/questions/548551-help-on-call-back-using-ajax-i-lose-share-buttons
-                addthis.toolbox(jQuery(element).get());
-            }
-        }
-    })
-    .config(function($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'main/main.html',
-                controller: 'MainCtrl'
-            });
-    })
-    .controller('MainCtrl', function($scope) {
-        $scope.awesomeThings = [
-            'HTML5 Boilerplate',
-            'AngularJS',
-            'Karma'
-        ];
-    });
+angular.module('godev-main',['ngRoute'])
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'main/main.html',
+        controller: 'MainCtrl'
+      });
+  })
+  .controller('MainCtrl', function ($scope) {
+    $scope.map = {
+      center: {
+        latitude: 45,
+        longitude: -73
+      },
+      zoom: 8
+    };
+
+    $scope.awesomeThings = [
+      'HTML5 Boilerplate',
+      'AngularJS',
+      'Karma'
+    ];
+  });
