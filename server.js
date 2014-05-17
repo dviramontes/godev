@@ -1,21 +1,36 @@
-var api_user,
-api_key;
-
 var sendgridAuth = require('./config');
+var mongoose = require('mongoose');
+var mongodb = require('./config').api.mongodb;
 
-api_user = sendgridAuth.api.sendgrid.username;
-api_key = sendgridAuth.api.sendgrid.password;
 
-console.log(sendgridAuth)
+var Ticket = require('./models/ticket');
 
-var sendgrid  = require('sendgrid')(api_user, api_key);
 
-sendgrid.send({
-  to:       'dviramontes@gmail.com',
-  from:     'other@example.com',
-  subject:  'Hello World!! batman' ,
-  text:     'My first email through SendGrid.'
-}, function(err, json) {
-  if (err) { return console.error(err); }
-  console.log(json);
+// mongoose.connect('mongodb://'+ mongodb.user +':'+ mongodb.pass+'@'+ mongodb.url);
+mongoose.connect('mongodb://'+ mongodb.url);
+
+mongoose.connection.on('open', function() {
+    console.log('database opened');
 });
+
+mongoose.connection.on('error', function(err) {
+	if(err)throw err;
+	console.log(error)
+});
+
+var api_user = sendgridAuth.api.sendgrid.username;
+var api_key = sendgridAuth.api.sendgrid.password;
+
+var sendgrid = require('sendgrid')(api_user, api_key);
+
+// sendgrid.send({
+//     to: 'dviramontes@gmail.com',
+//     from: 'other@example.com',
+//     subject: 'Hello World!! batman',
+//     text: 'My first email through SendGrid.'
+// }, function(err, json) {
+//     if (err) {
+//         return console.error(err);
+//     }
+//     console.log(json);
+// });
