@@ -12,6 +12,10 @@ angular.module('godev-main', [])
                     latitude: data.latitude,
                     longitude: data.longitude
                 },
+                marker :{
+                    latitude: data.latitude,
+                    longitude: data.longitude
+                },
                 zoom: 12
             };
 
