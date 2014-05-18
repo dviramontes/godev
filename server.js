@@ -112,7 +112,7 @@ server.get('/message/:personID', function(req, res) {
             console.log(messageSender);
             //messageSender.sendText(person.phoneNumber, undefined, undefined);
             console.log("After function call");
-            if (!person.phoneNumber) {
+            if (person.phoneNumber) {
                 console.log("IN IF!!");
                 messageSender.sendText(person.phoneNumber, undefined, undefined);
                 //return;
