@@ -48,17 +48,11 @@ var api_key = sendgridAuth.api.sendgrid.password;
 var sendgrid = require('sendgrid')(api_user, api_key);
 
 server.post('/reachout/:ident', function(req, res, next) {
-    
+
     Ticket.findOne({
         "ident": req.params.ident
     }, function(err, ticket) {
         if (err) throw err;
-
-        // send req.params.email to find(ident).email
-        // send req.params.phoneNumber to find(ident).phoneNumber
-        console.log(req.body);
-        console.log(ticket.email);
-        console.log(typeof ticket);
 
         if (req.body.email && ticket.email) {
             sendEmail(ticket.email, "donotreply@howcanihelp.com", "We found someone who can help!", req.body.email + " can help you, email them to get in touch then when your need is fulfilled click on 107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
@@ -69,13 +63,6 @@ server.post('/reachout/:ident', function(req, res, next) {
         }
 
         res.send(201, "sent..");
-
-        // request sent out, when someone responds we'll (text|email) you their (number|email address) to get in touch.
-        // click here if you no longer need your request or it is fulfilled: goo.gl/asdf
-
-        // a donator wants you to get in touch with them, their (number|email) is (666-6666|ham@steak.com).
-        // click here when you arrange for a drop off to mark your request as fulfilled: goo.gl/asdf
-
     });
 
 });
@@ -154,15 +141,19 @@ server.get('/tickets/:id', function(req, res, next) {
 
 server.get('/random', function(req, res, next) {
 
-    // var num = req.params.number;
-    Ticket.find()
-        .limit(1)
-        .skip(Math.floor(Math.random() * 2))
-        .exec(function(err, doc) {
-            if (err) throw err;
-            // TODO: we're sending auth token right now, that's bad
-            res.json(200, doc);
-        });
+    Ticket.count(function(err, c) {
+
+        Ticket.find()
+            .limit(1)
+            .skip(Math.floor(Math.random() * c))
+            .exec(function(err, doc) {
+
+                if (err) throw err;
+                // TODO: we're sending auth token right now, that's bad
+                res.json(200, doc);
+            });
+    });
+
 
 });
 
@@ -174,7 +165,7 @@ server.get('/message/:personID', function(req, res) {
         },
         function(err, person) {
             if (!person.phoneNumber) {
-                console.log("IN IF!!");
+                
                 messageSender.sendText(person.phoneNumber, undefined, undefined);
                 return;
             }
@@ -183,7 +174,7 @@ server.get('/message/:personID', function(req, res) {
 });
 
 server.get('/fulfill/:auth', function(req, res, next) {
-    console.log('got here..')
+    
     Ticket.findOneAndRemove({
         "auth": req.params.auth
     }, function(err, ticket) {

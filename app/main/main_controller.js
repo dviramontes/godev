@@ -31,6 +31,7 @@ angular.module('godev-main', [])
 
             $scope.about = data[0].about;
             $scope.need = data[0].needs;
+            $scope.location = data[0].address;
 
             $scope.ident = data[0].ident;
         });

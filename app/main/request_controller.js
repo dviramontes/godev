@@ -47,7 +47,8 @@ angular.module('godev-request', ['ngRoute'])
                 about: $scope.about,
                 needs: $scope.needs,
                 latitude: $scope.map.marker.latitude,
-                longitude: $scope.map.marker.longitude
+                longitude: $scope.map.marker.longitude,
+                location : $scope.address
             }
 
             $http.post('/ticket', payload)

@@ -6,7 +6,7 @@
 
     <div class="col-md-12 below">
         <google-map center="map.center" control="map.control" zoom="map.zoom" ng-click="openMap()">
-            <marker coords="map.center">
+            <marker coords="map.marker">
         </google-map>
     </div>
 </div>
@@ -57,7 +57,7 @@
         <form ng-hide="hideMessage" class="below form-group" ng-submit="reachOut()">
         <input type='text' placeholder='what email can you be reached at' class='form-control col-md-4 col-lg-4' ng-hide='prefersEmail' ng-model="email"/>
         <input type='text' placeholder='what phone number can you be reached at' class='form-control col-md-4 col-lg-4' ng-hide='prefersText' ng-model="phoneNumber"/>
-        <button class='form-control btn col-md-4'>
+        <button class='form-control btn col-md-4' data-toggle="modal" data-target="#myModal">
             Reach Out
         </button>
     </form>
@@ -87,6 +87,23 @@
 
             }
             </script>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Success</h4>
+            </div>
+            <div class="modal-body">
+                Thanks for offering to help! We've forwarded your info to them and they will get in touch with you when they get a chance.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
