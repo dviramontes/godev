@@ -1,8 +1,25 @@
 var twilio = require('twilio');
 var http = require('http');
+var createNewVoiceMessage = function() {
+
+}
+
+var messages = {
+    messageOne: {
+        message: 'Whats crackin?',
+        voice: 'woman',
+        language: 'en-gb'
+    },
+    messageTwo: {
+        message: 'Whats crackin2?',
+        voice: 'woman',
+        language: 'en-gb'
+    }
+}
 
 http.createServer(function(req, res) {
     //Create TwiML response
+    console.log("The request is " + req.object);
     var twiml = new twilio.TwimlResponse();
     twiml.say('Hello World!', {
         voice: 'woman',
