@@ -59,7 +59,9 @@ server.put('/tickets', function(req, res, next) {
             });
             console.log("Error in server.js put /tickets" + err.message);
         } else {
-            var data = JSON.parse(req.body);
+            var data = req.body;
+            console.log(typeof data);
+            //var data = JSON.parse(req.body);
             data.auth = buffer.toString('hex');
             Ticket.create(data, function(err, ticket) {
                 if (err) {
@@ -69,7 +71,7 @@ server.put('/tickets', function(req, res, next) {
                     console.log("There was an error. Unable to send text message");
                 } else {
                     // TODO: email or text with link to manage page
-                    messageSender.sendText(undefined, undefined, undefined);
+                    //messageSender.sendText(undefined, undefined, undefined);
                     res.status(201);
                     res.end();
                 }
@@ -103,7 +105,7 @@ server.get('/message/:personID', function(req, res) {
             auth: req.params.personID
         },
         function(err, person) {
-            if (person.phoneNumber) {
+            if (!person.phoneNumber) {
                 messageSender.sendText(person.phoneNumber, undefined, undefined);
                 return;
             }
