@@ -58,16 +58,15 @@ server.post('/reachout/:ident', function(req, res, next) {
             sendEmail(ticket.email, "donotreply@howcanihelp.com", "We found someone who can help!", req.body.email + " can help you, email them to get in touch then when your need is fulfilled click on http://107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
         }
 
-        console.log(ticket.phoneNumber);
-        console.log(req.body.phoneNumber);
-
         if (req.body.phoneNumber && ticket.phoneNumber) {
             // twilio
             // to from msg
-            messageSender.sendText(ticket.phoneNumber, twilioNumber, "We found someone who can help!" + req.body.phoneNumber + " can help you, email them to get in touch then when your need is fulfilled click on http://107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
+            messageSender.sendText("+1" + ticket.phoneNumber, twilioNumber, "We found someone who can help!" + req.body.phoneNumber + " can help you, email them to get in touch then when your need is fulfilled click on http://107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
 
         }
-
+        console.log(ticket.phoneNumber);
+        console.log(req.body.phoneNumber);
+        
         res.send(201, "sent..");
     });
 
@@ -109,7 +108,7 @@ server.post('/ticket', function(req, res, next) {
                             if (data.email) {
                                 sendEmail(data.email, "donotreply@howcanihelp.com", "Your request has been sent out.",
                                     "Your request sent out, when someone responds we'll (text|email) you their (number|email address) to get in touch." +
-                                    "click here if you no longer need your request or it is fulfilled: 107.170.192.17:8080/fulfill/" + data.auth)
+                                    "click here if you no longer need your request or it is fulfilled: http://107.170.192.17:8080/fulfill/" + data.auth)
                             }
                             if (data.phoneNumber) {
                                 // twilio

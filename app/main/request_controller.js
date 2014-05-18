@@ -43,7 +43,7 @@ angular.module('godev-request', ['ngRoute'])
 
             var payload = {
                 email: $scope.email,
-                phoneNumber: $scope.phoneNumber,
+                phoneNumber: ("+1"+ $scope.phoneNumber),
                 about: $scope.about,
                 needs: $scope.needs,
                 latitude: $scope.map.marker.latitude,
