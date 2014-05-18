@@ -9,7 +9,8 @@ var TicketSchema = new Schema({
     about: String,
     longitude: Number,
     latitude: Number,
-    location: String
+    location: String,
+    auth: String
 });
 
 TicketSchema.plugin(passportLocalMongoose);

@@ -37,11 +37,15 @@ var twilio = require('./twilio.js');
 server.put('/tickets', function(req, res, next) {
     crypto.randomBytes(16, function(err, buffer) {
         if (err) {
+
             res.json(500, {
                 err: err.message
             });
+
             console.log("Error Message in first if " + err.message);
+
         } else {
+
             var data = JSON.parse(req.body);
             data.auth = buffer.toString('hex');
 
@@ -76,34 +80,52 @@ server.get('/ticket/:id', function(req, res, next) {
     });
 });
 
-server.get('/random', function(req, res, next) {
-    res.json(404, {
-        err: "not written yet"
+server.del('/ticket/:auth', function(req, res, next) {
+
+    Ticket.remove({
+        auth: req.params.auth
+    }, function(err, ticket) {
+        if (err) {
+            return next(
+                new restify.InvalidArgumentError(JSON.stringify(err.errors))
+            );
+        }
+        res.send(204);
     });
-    // TODO: return random ticket data
+
+    // Ticket.find({
+    //     auth: req.params.auth
+    // }).exec(function(err, ticket) {
+    //     if (err) {
+    //         res.json(500, {
+    //             err: err.message
+    //         });
+    //     } else {
+    //         ticket.remove(function(err) {
+    //             if (err) {
+    //                 res.json(500, {
+    //                     err: err.message
+    //                 });
+    //             } else {
+    //                 res.status(204);
+    //                 res.end();
+    //             }
+    //         });
+    //     }
+    // });
 });
 
-server.del('/ticket/:auth', function(req, res, next) {
-    Ticket.find({
-        auth: req.params.auth
-    }).exec(function(err, ticket) {
-        if (err) {
-            res.json(500, {
-                err: err.message
-            });
-        } else {
-            ticket.remove(function(err) {
-                if (err) {
-                    res.json(500, {
-                        err: err.message
-                    });
-                } else {
-                    res.status(204);
-                    res.end();
-                }
-            });
-        }
-    });
+
+server.get('/random', function(req, res, next) {
+    // var num = req.params.number;
+    Ticket.find()
+        .limit(1)
+        .skip(Math.floor(Math.random() * 20))
+        .exec(function(err, doc) {
+            if (err) throw err;
+            res.json(200, doc);
+        });
+        
 });
 
 server.get(/.*/, restify.serveStatic({
@@ -112,6 +134,7 @@ server.get(/.*/, restify.serveStatic({
 }));
 
 server.listen(8080);
+
 // sendgrid.send({
 //     to: 'dviramontes@gmail.com',
 //     from: 'other@example.com',

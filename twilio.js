@@ -19,11 +19,13 @@ var makeCall = function(to, from, twimlURL) {
     });
 }
 var sendText = function(to, from, msg) {
+
     console.log("Send text in twilio was called");
+    
     client.sendMessage({
             to: to || '+13038596599',
             from: from || '+17208970284',
-            body: msg || 'Testing'
+            body: msg || 'http://www.google.com'
         },
         function(err, responseData) { //this function is executed when a response is received from Twilio
 
