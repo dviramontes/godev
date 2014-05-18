@@ -1,7 +1,8 @@
 var twilioAuth = require("./config");
-accountSid = twilioAuth.api.twilio.accountSid;
-authToken = twilioAuth.api.twilio.authToken;
-console.log(twilioAuth.api.twilio);
+
+var accountSid = twilioAuth.api.twilio.accountSid;
+var authToken = twilioAuth.api.twilio.authToken;
+
 var client = require('twilio')(accountSid, authToken);
 
 var makeCall = function(to, from, twimlURL) {
