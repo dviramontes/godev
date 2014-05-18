@@ -4,23 +4,25 @@ authToken = twilioAuth.api.twilio.authToken;
 console.log(twilioAuth.api.twilio);
 var client = require('twilio')(accountSid, authToken);
 
-client.calls.create({
-    from: "+17208970284",
-    to: "+13038596599",
-    url: "http://107.170.192.17:8080/", //"http://127.0.0.1:1337/", //"http://demo.twilio.com/welcome/voice/"
-    //method: "GET",
-    //fallbackMethod: "GET",
-    //statusCallbackMethod: "GET",
-    //record: "false"
-}, function(err, call) {
-    console.log(call.sid);
-});
-
-var sendText = function(msg) {
+var makeCall = function(to, from, twimlURL) {
+    client.calls.create({
+        to: to || "+13038596599",
+        from: from || "+17208970284",
+        url: twimlURL || "http://107.170.192.17:8080/", //"http://127.0.0.1:1337/", //"http://demo.twilio.com/welcome/voice/"
+        //method: "GET",
+        //fallbackMethod: "GET",
+        //statusCallbackMethod: "GET",
+        //record: "false"
+    }, function(err, call) {
+        console.log(call.sid);
+    });
+}
+var sendText = function(to, from, msg) {
+    console.log("Send text in twilio was called");
     client.sendMessage({
-            to: '+13038596599',
-            from: "+17208970284",
-            body: msg
+            to: to || '+13038596599',
+            from: from || '+17208970284',
+            body: msg || 'Testing'
         },
         function(err, responseData) { //this function is executed when a response is received from Twilio
 
@@ -31,9 +33,13 @@ var sendText = function(msg) {
                 // http://www.twilio.com/docs/api/rest/sending-sms#example-1
 
                 console.log(responseData.from); // outputs "+14506667788"
-                console.log(responseData.body); // outputs "word to your mother."
+                console.log(responseData.body); // outputs the msg
             }
         });
+}
+
+exports.functions = {
+    sendText: sendText
 }
 
 //var resp = new twilio.TwimlResponse();

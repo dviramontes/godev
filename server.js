@@ -1,21 +1,123 @@
-var api_user,
-api_key;
-
 var sendgridAuth = require('./config');
+var mongoose = require('mongoose');
+//var mongodb = require('./config').api.mongodb;
+var mongodb = sendgridAuth.api.mongodb;
+var restify = require('restify');
+var crypto = require('crypto');
+var Ticket = require('./models/ticket');
 
-api_user = sendgridAuth.api.sendgrid.username;
-api_key = sendgridAuth.api.sendgrid.password;
-
-console.log(sendgridAuth)
-
-var sendgrid  = require('sendgrid')(api_user, api_key);
-
-sendgrid.send({
-  to:       'dviramontes@gmail.com',
-  from:     'other@example.com',
-  subject:  'Hello World!! batman' ,
-  text:     'My first email through SendGrid.'
-}, function(err, json) {
-  if (err) { return console.error(err); }
-  console.log(json);
+var server = restify.createServer({
+    name: 'GovDev'
 });
+server.use(restify.bodyParser({
+    mapParams: false
+}));
+
+// mongoose.connect('mongodb://'+ mongodb.user +':'+ mongodb.pass+'@'+ mongodb.url);
+console.log("Mongo URL is " + mongodb.url);
+mongoose.connect('mongodb://' + mongodb.url);
+
+mongoose.connection.on('open', function() {
+    console.log('database opened');
+});
+
+mongoose.connection.on('error', function(err) {
+    if (err) {
+        throw err;
+    }
+
+    console.log(error)
+});
+
+var api_user = sendgridAuth.api.sendgrid.username;
+var api_key = sendgridAuth.api.sendgrid.password;
+var sendgrid = require('sendgrid')(api_user, api_key);
+var twilio = require('./twilio.js');
+
+server.put('/tickets', function(req, res, next) {
+    crypto.randomBytes(16, function(err, buffer) {
+        if (err) {
+            res.json(500, {
+                err: err.message
+            });
+            console.log("Error Message in first if " + err.message);
+        } else {
+            var data = JSON.parse(req.body);
+            data.auth = buffer.toString('hex');
+
+            Ticket.create(data, function(err, ticket) {
+                if (err) {
+                    res.json(500, {
+                        err: err.message
+                    });
+                    console.log("There was an error. Unable to send text message");
+                } else {
+                    // TODO: email or text with link to manage page
+                    twilio.functions.sendText(undefined, undefined, undefined);
+                    res.status(201);
+                    res.end();
+                }
+            });
+        }
+    });
+});
+
+server.get('/tickets/:id', function(req, res, next) {
+    var document = Ticket.findById(req.params.id, function(err, ticket) {
+        if (err) {
+            res.json(500, {
+                err: err.message
+            });
+        } else {
+            res.json(200, ticket);
+        }
+    });
+});
+
+server.get('/random', function(req, res, next) {
+    res.json(404, {
+        err: "not written yet"
+    });
+    // TODO: return random ticket data
+});
+
+server.del('/ticket/:auth', function(req, res, next) {
+    Ticket.find({
+        auth: req.params.auth
+    }).exec(function(err, ticket) {
+        if (err) {
+            res.json(500, {
+                err: err.message
+            });
+        } else {
+            ticket.remove(function(err) {
+                if (err) {
+                    res.json(500, {
+                        err: err.message
+                    });
+                } else {
+                    res.status(204);
+                    res.end();
+                }
+            });
+        }
+    });
+});
+
+server.get(/.*/, restify.serveStatic({
+    'directory': './build',
+    'default': 'index.html'
+}));
+
+server.listen(8080);
+// sendgrid.send({
+//     to: 'dviramontes@gmail.com',
+//     from: 'other@example.com',
+//     subject: 'Hello World!! batman',
+//     text: 'My first email through SendGrid.'
+// }, function(err, json) {
+//     if (err) {
+//         return console.error(err);
+//     }
+//     console.log(json);
+// });
