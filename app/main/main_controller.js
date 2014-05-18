@@ -33,9 +33,18 @@ angular.module('godev-main', [])
         $scope.need = "lorem";
 
         
-        $scope.showSocial= true;
+        $scope.hideSocial= true;
+        $scope.hideMessage = true;
         
         $scope.showSocialMedia = function() {
-            $scope.showSocial  = !$scope.showSocial;
+            $scope.hideSocial  = !$scope.hideSocial;
+        }
+
+        $scope.sendTextMessage = function() {
+            $scope.hideMessage = !$scope.hideMessage;
+        }
+
+        $scope.reloadPage = function() {
+            document.location.reload(true);
         }
     });

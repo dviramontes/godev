@@ -33,12 +33,12 @@
 
 <div class="row bookend below containing">
     <div class="col-md-4">
-        <button class="form-control below btn">
+        <button class="form-control below btn" ng-click="sendTextMessage()">
             Help Them
         </button>
     </div>
     <div class="col-md-4">
-        <button class="form-control below btn">
+        <button class="form-control below btn" ng-click="reloadPage()">
             I Can't Help That Person
         </button>
     </div>
@@ -48,7 +48,10 @@
         </button>
     </div>
     <div class="col-md-4 pull-right">
-        <div ng-hide="showSocial" addthis-toolbox class="addthis_toolbox addthis_default_style addthis_32x32_style pull-right below">
+        <div ng-hide="hideMessage" class="below">
+           Hi there
+        </div>
+        <div ng-hide="hideSocial" addthis-toolbox class="addthis_toolbox addthis_default_style addthis_32x32_style pull-right below">
             <a class="addthis_button_facebook"></a>
             <a class="addthis_button_twitter"></a>
             <a class="addthis_button_google_plusone_share"></a>
