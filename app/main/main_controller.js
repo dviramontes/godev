@@ -1,47 +1,50 @@
 'use strict';
 
 angular.module('godev-main', [])
-    .controller('MainCtrl', function($scope, API) {
-
-        API.getRandomTicket().then(function(data) {
-
-            console.log(data)
-
-            $scope.map = {
-                center: {
-                    latitude: data.latitude,
-                    longitude: data.longitude
-                },
-                marker :{
-                    latitude: data.latitude,
-                    longitude: data.longitude
-                },
-                zoom: 12
-            };
-
-        });
+    .controller('MainCtrl', function($scope, API, $http) {
 
         $scope.map = {
             center: {
-                latitude: 39.740617,
-                longitude: -104.987106
+                latitude: 0,
+                longitude: 0
             },
-            zoom: 12
+            marker: {
+                latitude: 0,
+                longitude: 0
+            },
+            zoom: 12,
+            control: {}
         };
 
+
+        API.getRandomTicket().then(function(data) {
+
+            $scope.map.control.refresh({
+                latitude: data[0].latitude,
+                longitude: data[0].longitude
+            });
+
+            $scope.map.marker = {
+                latitude: data[0].latitude,
+                longitude: data[0].longitude
+            };
+
+            $scope.about = data[0].about;
+            $scope.need = data[0].needs;
+
+            $scope.ident = data[0].ident;
+        });
+
+
         $scope.openMap = function() {
-            window.open("https://maps.google.com/maps?q=" + ($scope.map.center.latitude + .0000) + "," + ($scope.map.center.longitude + .0000), '_blank');
+            window.open("https://maps.google.com/maps?q=" + ($scope.map.marker.latitude + .0000) + "," + ($scope.map.marker.longitude + .0000), '_blank');
         }
 
-        $scope.about = "lorem ipsum dolor sit amet";
-        $scope.need = "lorem";
-
-        
-        $scope.hideSocial= true;
+        $scope.hideSocial = true;
         $scope.hideMessage = true;
-        
+
         $scope.showSocialMedia = function() {
-            $scope.hideSocial  = !$scope.hideSocial;
+            $scope.hideSocial = !$scope.hideSocial;
         }
 
         $scope.sendTextMessage = function() {
@@ -50,5 +53,19 @@ angular.module('godev-main', [])
 
         $scope.reloadPage = function() {
             document.location.reload(true);
+        }
+        $scope.reachOut = function() {
+            var payload = {
+                email: $scope.email,
+                phoneNumber: $scope.phoneNumber
+            }
+            console.log('here...')
+            $http.post('/reachout/' + $scope.ident, payload)
+                .success(function() {
+                    console.log('success');
+                })
+                .error(function(err) {
+                    console.log(err)
+                });
         }
     });

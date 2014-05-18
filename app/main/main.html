@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-12 text-center bookend" style="background-image:url(../images/icon.png); background-repeat:no-repeat; background-position: 98% 50%">
-        <h1><a href="#/">HOW DO I GIVE SOME HELP</a>
+        <h1><a href="#/">HOW CAN I HELP ?</a>
         </h1>
     </div>
 
     <div class="col-md-12 below">
-        <google-map center="map.center" zoom="map.zoom" ng-click="openMap()">
+        <google-map center="map.center" control="map.control" zoom="map.zoom" ng-click="openMap()">
             <marker coords="map.center">
         </google-map>
     </div>
@@ -20,7 +20,7 @@
 
 <div class="row">
     <div class="col-md-12 info below">
-        <h3>Needs</h3>
+        <h3>Need</h3>
         {{need}}
     </div>
 </div>
@@ -35,7 +35,7 @@
 <div class="row bookend below containing">
     <div class="col-md-3">
         <button class="form-control below btn" ng-click="sendTextMessage()">
-            Help Them
+            I Can Help Them
         </button>
     </div>
     <div class="col-md-3">
@@ -53,11 +53,17 @@
             <a href="#/request">Actually I need help...</a>
         </button>
     </div>
-    <div class="col-md-3 pull-right">
-        <div ng-hide="hideMessage" class="below">
-            Hi there
-        </div>
-        <div ng-hide="hideSocial" addthis-toolbox class="addthis_toolbox addthis_default_style addthis_32x32_style pull-right below">
+    <div style="margin-top:10px;">
+        <form ng-hide="hideMessage" class="below form-group" ng-submit="reachOut()">
+        <input type='text' placeholder='what email can you be reached at' class='form-control col-md-4 col-lg-4' ng-hide='prefersEmail' ng-model="email"/>
+        <input type='text' placeholder='what phone number can you be reached at' class='form-control col-md-4 col-lg-4' ng-hide='prefersText' ng-model="phoneNumber"/>
+        <button class='form-control btn col-md-4'>
+            Reach Out
+        </button>
+    </form>
+    </div>
+    <div class="col-md-3 pull-right" ng-hide='hideSocial'>
+        <div addthis-toolbox class="addthis_toolbox addthis_default_style addthis_32x32_style pull-right below">
             <a class="addthis_button_facebook"></a>
             <a class="addthis_button_twitter"></a>
             <a class="addthis_button_google_plusone_share"></a>

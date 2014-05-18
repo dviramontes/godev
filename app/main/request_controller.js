@@ -3,8 +3,6 @@
 angular.module('godev-request', ['ngRoute'])
     .controller('RequestCtrl', function($scope, API, $http) {
 
-        // var coords  = navigation.geolocation
-
         $scope.map = {
             center: {
                 latitude: 39.740617,
@@ -20,20 +18,8 @@ angular.module('godev-request', ['ngRoute'])
 
         $scope.address = '';
 
-        var lookupAddress = function(addr) {
-            // $http.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ addr +'&sensor=true&key=AIzaSyB6dzb6lJyQa00R9OWC2W0LGiUrEibLPaU', function(data){
-//             $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+CA&sensor=true&key=AIzaSyB6dzb6lJyQa00R9OWC2W0LGiUrEibLPaU
-// ', function(data) {
-//                 console.log(data);
-//             });
-        }
-
-        lookupAddress('800 ogden st');
-
         $scope.$watch('address', function() {
 
-            // http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true_or_false&key=API_KEY
-            console.log('address is now ' + $scope.address);
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({
                 address: $scope.address
@@ -44,7 +30,7 @@ angular.module('godev-request', ['ngRoute'])
                         longitude: result[0].geometry.location.A
                     });
                     $scope.map.marker = {
-                    	latitude: result[0].geometry.location.k,
+                        latitude: result[0].geometry.location.k,
                         longitude: result[0].geometry.location.A
                     };
                 }
@@ -53,18 +39,25 @@ angular.module('godev-request', ['ngRoute'])
             // TODO: update map with geotag of new address
         });
 
-        $scope.submit = function(){
+        $scope.submitForm = function() {
+
             var payload = {
-                email : $scope.email,
-                phoneNumber : $scope.phoneNumber,
-                about : $scope.about,
-                needs : $scope.needs,
-                address : $scope.address,
-
+                email: $scope.email,
+                phoneNumber: $scope.phoneNumber,
+                about: $scope.about,
+                needs: $scope.needs,
+                latitude: $scope.map.marker.latitude,
+                longitude: $scope.map.marker.longitude
             }
-            $http.post('/ticket', payload, function(err, ticket){
 
-            })
+            $http.post('/ticket', payload)
+                .success(function() {
+                    console.log('success');
+                })
+                .error(function(err) {
+                    console.log(err)
+                    console.error('no!')
+                });
         }
 
 

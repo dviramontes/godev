@@ -47,37 +47,99 @@ var api_user = sendgridAuth.api.sendgrid.username;
 var api_key = sendgridAuth.api.sendgrid.password;
 var sendgrid = require('sendgrid')(api_user, api_key);
 
-server.put('/tickets', function(req, res, next) {
-   crypto.randomBytes(16, function(err, buffer) {
-       if (err) {
-           res.json(500, {
-               err: err.message
-           });
-           console.log("Error in server.js put /tickets" + err.message);
-       } else {
+server.post('/reachout/:ident', function(req, res, next) {
+    
+    Ticket.findOne({
+        "ident": req.params.ident
+    }, function(err, ticket) {
+        if (err) throw err;
 
-           console.log(typeof req.body)
-           var data = req.body;
-           // var data = JSON.parse(req.body);
+        // send req.params.email to find(ident).email
+        // send req.params.phoneNumber to find(ident).phoneNumber
+        console.log(req.body);
+        console.log(ticket.email);
+        console.log(typeof ticket);
 
-           data.auth = buffer.toString('hex');
-           Ticket.create(data, function(err, ticket) {
-               if (err) {
-                   res.json(500, {
-                       err: err.message
-                   });
-                   console.log("There was an error. Unable to send text message");
-               } else {
-                   // TODO: email or text with link to manage page
-                   messageSender.sendText(undefined, undefined, undefined);
-                   res.status(201);
-                   res.end();
-               }
-           });
-       }
-   });
+        if (req.body.email && ticket.email) {
+            sendEmail(ticket.email, "donotreply@howcanihelp.com", "We found someone who can help!", req.body.email + " can help you, email them to get in touch then when your need is fulfilled click on 107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
+        }
+        if (req.body.phoneNumber && ticket.phoneNumber) {
+            // twilio
+
+        }
+
+        res.send(201, "sent..");
+
+        // request sent out, when someone responds we'll (text|email) you their (number|email address) to get in touch.
+        // click here if you no longer need your request or it is fulfilled: goo.gl/asdf
+
+        // a donator wants you to get in touch with them, their (number|email) is (666-6666|ham@steak.com).
+        // click here when you arrange for a drop off to mark your request as fulfilled: goo.gl/asdf
+
+    });
+
 });
 
+server.post('/ticket', function(req, res, next) {
+
+    crypto.randomBytes(16, function(err, buffer) {
+        if (err) {
+            res.json(500, {
+                err: err.message
+            });
+            console.log("Error in server.js post /tickets" + err.message);
+        } else {
+
+            var data = req.body;
+            data.ident = buffer.toString('hex');
+
+            crypto.randomBytes(16, function(err, buffer) {
+                if (err) {
+                    res.json(500, {
+                        err: err.message
+                    });
+                    console.log("Error in server.js post /tickets" + err.message);
+                } else {
+
+
+                    data.auth = buffer.toString('hex');
+
+                    Ticket.create(data, function(err, ticket) {
+                        if (err) {
+                            res.json(500, {
+                                err: err.message
+                            });
+                            console.log("There was an error. Unable to send text message");
+                        } else {
+
+                            // TODO: email or text with link to manage page
+                            if (data.email) {
+                                sendEmail(data.email, "donotreply@howcanihelp.com", "Your request has been sent out.",
+                                    "Your request sent out, when someone responds we'll (text|email) you their (number|email address) to get in touch." +
+                                    "click here if you no longer need your request or it is fulfilled: 107.170.192.17:8080/fulfill/" + data.auth)
+                            }
+                            if (data.phoneNumber) {
+                                // twilio
+
+                            }
+
+
+
+                            // request sent out, when someone responds we'll (text|email) you their (number|email address) to get in touch.
+                            // click here if you no longer need your request or it is fulfilled: goo.gl/asdf
+
+                            // a donator wants you to get in touch with them, their (number|email) is (666-6666|ham@steak.com).
+                            // click here when you arrange for a drop off to mark your request as fulfilled: goo.gl/asdf
+
+                            res.status(201);
+                            res.end();
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
 server.get('/tickets/:id', function(req, res, next) {
     var document = Ticket.findById(req.params.id, function(err, ticket) {
         if (err) {
@@ -90,22 +152,15 @@ server.get('/tickets/:id', function(req, res, next) {
     });
 });
 
-server.post('/ticket', function(req,res){
-    console.log(req.body)
-    new Ticket.create(req.body, function(err, ticket){
-        if(err) throw err;
-        console.log(ticket);
-    }).save();
-})
-
 server.get('/random', function(req, res, next) {
 
     // var num = req.params.number;
     Ticket.find()
         .limit(1)
-        .skip(Math.floor(Math.random() * 20))
+        .skip(Math.floor(Math.random() * 2))
         .exec(function(err, doc) {
             if (err) throw err;
+            // TODO: we're sending auth token right now, that's bad
             res.json(200, doc);
         });
 
@@ -127,25 +182,18 @@ server.get('/message/:personID', function(req, res) {
         });
 });
 
-server.del('/ticket/:auth', function(req, res, next) {
-    Ticket.find({
-        auth: req.params.auth
-    }).exec(function(err, ticket) {
+server.get('/fulfill/:auth', function(req, res, next) {
+    console.log('got here..')
+    Ticket.findOneAndRemove({
+        "auth": req.params.auth
+    }, function(err, ticket) {
         if (err) {
             res.json(500, {
                 err: err.message
             });
         } else {
-            ticket.remove(function(err) {
-                if (err) {
-                    res.json(500, {
-                        err: err.message
-                    });
-                } else {
-                    res.status(204);
-                    res.end();
-                }
-            });
+            // res.status(204);
+            res.send(204);
         }
     });
 });

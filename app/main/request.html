@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12 text-center bookend" style="background-image:url(../images/icon.png); background-repeat:no-repeat; background-position: 98% 50%">
-        <h1><a href="#/request">HOW DO I GET SOME HELP</a>
+        <h1><a href="#/request">WHO CAN HELP ?</a>
         </h1>
     </div>
 
@@ -11,18 +11,17 @@
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-md-12 info below">
 
-        <form action="" ng-submit="submit()">
+        <form action="" ng-submit="submitForm()">
             <div class="form-group">
                 <h3>About</h3>
                 <div class="form-group">
                     <!-- <label for="exampleInputEmail1">Email address</label> -->
                     <input type="text" class="form-control" id="exampleInputEmail1" ng-model="about" placeholder="in 140 tell us about your situation..">
                 </div>
-                <h3>Needs</h3>
+                <h3>Need</h3>
                 <div class="form-group">
                     <!-- <label for="exampleInputEmail1">Email address</label> -->
                     <input type="input" class="form-control" id="exampleInputEmail1" placeholder="tell us about your need, examples vegan baby food, a walker, etc.." ng-model="needs">
@@ -41,6 +40,7 @@
                     <input type="phone" class="form-control" id="exampleInputEmail1" ng-model="phoneNumber" placeholder="303-333-1234" label="dasd" value="choice">
                 </label>
 
+                <input type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
             </div>
         </form>
     </div>
@@ -48,23 +48,29 @@
 
 <div class="row bookend below containing">
     <div class="col-md-6 col-push-md-3">
-        <button class="form-control below btn" ng-click="submit()">
-            Get Help
-        </button>
+
     </div>
     <div class="col-md-6">
         <button class="form-control below btn">
             <a href="#/">Actually I want to help...</a>
         </button>
     </div>
-    <!--     <div class="col-md-4">
-        <button class="form-control below btn">
-            I Can't Help That Person
-        </button>
-    </div> -->
-    <!--     <div class="col-md-4">
-        <button class="form-control below btn">
-            My Friends Might Be Able To Help
-        </button>
-    </div> -->
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Success</h4>
+            </div>
+            <div class="modal-body">
+                Your ticket has been submitted. Thanks!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
