@@ -5,10 +5,12 @@ var mongodb = sendgridAuth.api.mongodb;
 var restify = require('restify');
 var crypto = require('crypto');
 var Ticket = require('./models/ticket');
+var pem = require('pem');
 
 var server = restify.createServer({
     name: 'GovDev'
 });
+
 server.use(restify.bodyParser({
     mapParams: false
 }));
@@ -66,20 +68,6 @@ server.put('/tickets', function(req, res, next) {
     });
 });
 
-server.get('/ticket/:id', function(req, res, next) {
-    // console.log('pritingin..');
-    // console.log(typereq.params.id);
-    Ticket.find({"id":req.params.id}, function(err, ticket) {
-        if (err) {
-            res.json(500, {
-                err: err.message
-            });
-        } else {
-            res.json(200, ticket);
-        }
-    });
-});
-
 server.del('/ticket/:auth', function(req, res, next) {
 
     Ticket.remove({
@@ -92,31 +80,11 @@ server.del('/ticket/:auth', function(req, res, next) {
         }
         res.send(204);
     });
-
-    // Ticket.find({
-    //     auth: req.params.auth
-    // }).exec(function(err, ticket) {
-    //     if (err) {
-    //         res.json(500, {
-    //             err: err.message
-    //         });
-    //     } else {
-    //         ticket.remove(function(err) {
-    //             if (err) {
-    //                 res.json(500, {
-    //                     err: err.message
-    //                 });
-    //             } else {
-    //                 res.status(204);
-    //                 res.end();
-    //             }
-    //         });
-    //     }
-    // });
 });
 
 
 server.get('/random', function(req, res, next) {
+
     // var num = req.params.number;
     Ticket.find()
         .limit(1)
@@ -145,4 +113,40 @@ server.listen(8080);
 //         return console.error(err);
 //     }
 //     console.log(json);
+// });
+
+// server.get('/ticket/:auth', function(req, res, next) {
+
+//     // console.log('pritingin..');
+//     // console.log(typereq.params.id);
+
+
+//     var count = 0;
+
+//     Ticket.find({}, function(err, tickets){
+//         if(err) throw err;
+//         console.log(tickets);
+//         count = tickets.length;
+//     }).limit(1);
+
+//     Ticket.find().limit(1).
+
+
+
+
+//     // console.log(count)
+
+//     // Ticket.find()
+//     //     .limit(1)
+//     //     .skip()
+
+//     // Ticket.find({"id":req.params.id}, function(err, ticket) {
+//     //     if (err) {
+//     //         res.json(500, {
+//     //             err: err.message
+//     //         });
+//     //     } else {
+//     //         res.json(200, ticket);
+//     //     }
+//     // });
 // });

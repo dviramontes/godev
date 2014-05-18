@@ -1,47 +1,41 @@
 'use strict';
 
-angular.module('godev-main', ['ngRoute'])
-    .service('API', function($http) {
-        return {
-            ticket: function(id) {
-                return $http.get("/ticket/" + id).then(function(response) {
-                    if (response.data.error) {
-                        return null;
-                    } else {
-                        return response.data;
-                    }
-                });
-            }
-        }
-    })
-    .config(function($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'main/main.html',
-                controller: 'MainCtrl'
-            });
-    })
+angular.module('godev-main', [])
     .controller('MainCtrl', function($scope, API) {
-        
-        API.ticket(0).then(function(data){
-          console.log(data)
-          // $scope.ticket = data;
+
+        API.getRandomTicket().then(function(data) {
+
+            console.log(data)
+
+            $scope.map = {
+                center: {
+                    latitude: data.latitude,
+                    longitude: data.longitude
+                },
+                zoom: 12
+            };
+
         });
-        
+
         $scope.map = {
             center: {
-                latitude: 45,
-                longitude: -73
+                latitude: 39.740617,
+                longitude: -104.987106
             },
             zoom: 12
         };
 
         $scope.openMap = function() {
-            window.open("https://maps.google.com/maps?q=" +
-                ($scope.map.center.latitude + .0000) + "," + ($scope.map.center.longitude + .0000), '_blank');
+            window.open("https://maps.google.com/maps?q=" + ($scope.map.center.latitude + .0000) + "," + ($scope.map.center.longitude + .0000), '_blank');
         }
 
         $scope.about = "lorem ipsum dolor sit amet";
-
         $scope.need = "lorem";
+
+        
+        $scope.showSocial= true;
+        
+        $scope.showSocialMedia = function() {
+            $scope.showSocial  = !$scope.showSocial;
+        }
     });

@@ -1,50 +1,77 @@
 <div class="row">
-  <div class="col-md-12 text-center bookend">
-    <h1>HOW DO I GIVE SOME HELP</h1>
-  </div>
+    <div class="col-md-12 text-center bookend">
+        <h1>HOW DO I GIVE SOME HELP</h1>
+    </div>
 
-  <div class="col-md-12 below">
-    <google-map center="map.center" zoom="map.zoom" ng-click="openMap()">
-      <marker coords="map.center">
-    </google-map>
-  </div>
+    <div class="col-md-12 below">
+        <google-map center="map.center" zoom="map.zoom" ng-click="openMap()">
+            <marker coords="map.center">
+        </google-map>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12 info below">
-    <h3>About</h3>
-    {{about}}
-  </div>
+    <div class="col-md-12 info below">
+        <h3>About</h3>
+        {{about}}
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12 info below">
-    <h3>Needs</h3>
-      {{need}}
-  </div>
+    <div class="col-md-12 info below">
+        <h3>Needs</h3>
+        {{need}}
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12 info below">
-    <h3>Location</h3>
-      {{location}}
-  </div>
+    <div class="col-md-12 info below">
+        <h3>Location</h3>
+        {{location}}
+    </div>
 </div>
 
 <div class="row bookend below containing">
-  <div class="col-md-4">
-    <button class="form-control below btn">
-      Help Them
-    </button>
-  </div>
-  <div class="col-md-4">
-    <button class="form-control below btn">
-      I Can't Help That Person 
-    </button>
-  </div>
-  <div class="col-md-4">
-    <button class="form-control below btn">
-      My Friends Might Be Able To Help
-    </button>
-  </div>
+    <div class="col-md-4">
+        <button class="form-control below btn">
+            Help Them
+        </button>
+    </div>
+    <div class="col-md-4">
+        <button class="form-control below btn">
+            I Can't Help That Person
+        </button>
+    </div>
+    <div class="col-md-4">
+        <button class="form-control below btn" ng-click="showSocialMedia()">
+            My Friends Might Be Able To Help
+        </button>
+    </div>
+    <div class="col-md-4 pull-right">
+        <div ng-hide="showSocial" addthis-toolbox class="addthis_toolbox addthis_default_style addthis_32x32_style pull-right below">
+            <a class="addthis_button_facebook"></a>
+            <a class="addthis_button_twitter"></a>
+            <a class="addthis_button_google_plusone_share"></a>
+            <a class="addthis_button_compact"></a>
+            <a class="addthis_counter addthis_bubble_style"></a>
+            <script type="text/javascript">
+            var twitterTemplate = "";
+
+            var addthis_config = {
+                "data_track_clickback": false,
+                "data_track_addressbar": false
+            };
+            var addthis_share = {
+                templates: {
+                    twitter: 'Please help this family with XYZ, via {{title}} : {{url}} @username',
+                    fb: 'check out {{title}} : {{url}} @ABC'
+                },
+                url_transforms: {
+                    clean: true
+                }
+
+            }
+            </script>
+        </div>
+    </div>
 </div>
