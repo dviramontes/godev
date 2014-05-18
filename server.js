@@ -57,11 +57,10 @@ server.put('/tickets', function(req, res, next) {
             res.json(500, {
                 err: err.message
             });
-            console.log("Error Message in first if " + err.message);
+            console.log("Error in server.js put /tickets" + err.message);
         } else {
             var data = JSON.parse(req.body);
             data.auth = buffer.toString('hex');
-
             Ticket.create(data, function(err, ticket) {
                 if (err) {
                     res.json(500, {
@@ -100,38 +99,16 @@ server.get('/random', function(req, res, next) {
 });
 
 server.get('/message/:personID', function(req, res) {
-    console.log("Here 1");
     Ticket.findOne({
             auth: req.params.personID
         },
         function(err, person) {
-            console.log(person);
-            console.log("Something else");
-            //var contactMethod = person.phoneNumber || person.email;
-            //messages.functions.sendText(personID.phoneNumber, );
-            console.log(messageSender);
-            //messageSender.sendText(person.phoneNumber, undefined, undefined);
-            console.log("After function call");
             if (person.phoneNumber) {
-                console.log("IN IF!!");
                 messageSender.sendText(person.phoneNumber, undefined, undefined);
-                //return;
+                return;
             }
             sendEmail(person.email, "jnels1242012@gmail.com", "This is a subject", "This is a message");
         });
-    //var twiml = new twilio.TwimlResponse();
-    /*twiml.say('Hello World!', {
-        voice: 'woman',
-        language: 'en-gb'
-    });
-    console.log(twiml.toString());
-
-    res.writeHead(200, {
-        'Content-Type': 'text/xml'
-      });*/
-
-    //console.log("Twiml response\n" + twiml.toString());
-    //res.end(twiml.toString());
 });
 
 server.del('/ticket/:auth', function(req, res, next) {
