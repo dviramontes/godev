@@ -40,7 +40,8 @@ var sendText = function(to, from, msg) {
 }
 
 exports.functions = {
-    sendText: sendText
-}
+    sendText: sendText,
+    makeCall: makeCall
+};
 
 //var resp = new twilio.TwimlResponse();

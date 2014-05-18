@@ -1,11 +1,27 @@
 var sendgridAuth = require('./config');
 var mongoose = require('mongoose');
+var twilio = require('twilio');
+var messageSender = require('./twilio.js').functions;
 //var mongodb = require('./config').api.mongodb;
 var mongodb = sendgridAuth.api.mongodb;
 var restify = require('restify');
 var crypto = require('crypto');
 var Ticket = require('./models/ticket');
-var pem = require('pem');
+var twilioNumber = '+17208970284';
+var incrementer = 0;
+
+var messages = {
+    messageOne: {
+        message: 'Whats crackin?',
+        voice: 'woman',
+        language: 'en-gb'
+    },
+    messageTwo: {
+        message: 'Whats crackin2?',
+        voice: 'woman',
+        language: 'en-gb'
+    }
+}
 
 var server = restify.createServer({
     name: 'GovDev'
@@ -34,20 +50,15 @@ mongoose.connection.on('error', function(err) {
 var api_user = sendgridAuth.api.sendgrid.username;
 var api_key = sendgridAuth.api.sendgrid.password;
 var sendgrid = require('sendgrid')(api_user, api_key);
-var twilio = require('./twilio.js');
 
 server.put('/tickets', function(req, res, next) {
     crypto.randomBytes(16, function(err, buffer) {
         if (err) {
-
             res.json(500, {
                 err: err.message
             });
-
             console.log("Error Message in first if " + err.message);
-
         } else {
-
             var data = JSON.parse(req.body);
             data.auth = buffer.toString('hex');
 
@@ -68,32 +79,82 @@ server.put('/tickets', function(req, res, next) {
     });
 });
 
-server.del('/ticket/:auth', function(req, res, next) {
-
-    Ticket.remove({
-        auth: req.params.auth
-    }, function(err, ticket) {
+server.get('/tickets/:id', function(req, res, next) {
+    var document = Ticket.findById(req.params.id, function(err, ticket) {
         if (err) {
-            return next(
-                new restify.InvalidArgumentError(JSON.stringify(err.errors))
-            );
+            res.json(500, {
+                err: err.message
+            });
+        } else {
+            res.json(200, ticket);
         }
-        res.send(204);
     });
 });
 
 
 server.get('/random', function(req, res, next) {
+    res.json(404, {
+        err: "not written yet"
+    });
+    // TODO: return random ticket data
+});
 
-    // var num = req.params.number;
-    Ticket.find()
-        .limit(1)
-        .skip(Math.floor(Math.random() * 20))
-        .exec(function(err, doc) {
-            if (err) throw err;
-            res.json(200, doc);
+server.get('/message/:personID', function(req, res) {
+    console.log("Here 1");
+    Ticket.findOne({
+            auth: req.params.personID
+        },
+        function(err, person) {
+            console.log(person);
+            console.log("Something else");
+            //var contactMethod = person.phoneNumber || person.email;
+            //messages.functions.sendText(personID.phoneNumber, );
+            console.log(messageSender);
+            //messageSender.sendText(person.phoneNumber, undefined, undefined);
+            console.log("After function call");
+            if (!person.phoneNumber) {
+                console.log("IN IF!!");
+                messageSender.sendText(person.phoneNumber, undefined, undefined);
+                //return;
+            }
+            sendEmail(person.email, "jnels1242012@gmail.com", "This is a subject", "This is a message");
         });
-        
+    //var twiml = new twilio.TwimlResponse();
+    /*twiml.say('Hello World!', {
+        voice: 'woman',
+        language: 'en-gb'
+    });
+    console.log(twiml.toString());
+
+    res.writeHead(200, {
+        'Content-Type': 'text/xml'
+      });*/
+
+    //console.log("Twiml response\n" + twiml.toString());
+    //res.end(twiml.toString());
+});
+
+server.del('/ticket/:auth', function(req, res, next) {
+    Ticket.find({
+        auth: req.params.auth
+    }).exec(function(err, ticket) {
+        if (err) {
+            res.json(500, {
+                err: err.message
+            });
+        } else {
+            ticket.remove(function(err) {
+                if (err) {
+                    res.json(500, {
+                        err: err.message
+                    });
+                } else {
+                    res.status(204);
+                    res.end();
+                }
+            });
+        }
+    });
 });
 
 server.get(/.*/, restify.serveStatic({
@@ -103,50 +164,16 @@ server.get(/.*/, restify.serveStatic({
 
 server.listen(8080);
 
-// sendgrid.send({
-//     to: 'dviramontes@gmail.com',
-//     from: 'other@example.com',
-//     subject: 'Hello World!! batman',
-//     text: 'My first email through SendGrid.'
-// }, function(err, json) {
-//     if (err) {
-//         return console.error(err);
-//     }
-//     console.log(json);
-// });
-
-// server.get('/ticket/:auth', function(req, res, next) {
-
-//     // console.log('pritingin..');
-//     // console.log(typereq.params.id);
-
-
-//     var count = 0;
-
-//     Ticket.find({}, function(err, tickets){
-//         if(err) throw err;
-//         console.log(tickets);
-//         count = tickets.length;
-//     }).limit(1);
-
-//     Ticket.find().limit(1).
-
-
-
-
-//     // console.log(count)
-
-//     // Ticket.find()
-//     //     .limit(1)
-//     //     .skip()
-
-//     // Ticket.find({"id":req.params.id}, function(err, ticket) {
-//     //     if (err) {
-//     //         res.json(500, {
-//     //             err: err.message
-//     //         });
-//     //     } else {
-//     //         res.json(200, ticket);
-//     //     }
-//     // });
-// });
+var sendEmail = function(to, from, subject, msg) {
+    sendgrid.send({
+        to: to, //'dviramontes@gmail.com',
+        from: from, //'other@example.com',
+        subject: subject, //'Hello World!! batman',
+        text: msg //'My first email through SendGrid.'
+    }, function(err, json) {
+        if (err) {
+            return console.error(err);
+        }
+        console.log(json);
+    });
+}

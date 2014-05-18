@@ -5,6 +5,8 @@ passportLocalMongoose = require('passport-local-mongoose');
 
 
 var TicketSchema = new Schema({
+    email: String,
+    phoneNumber: String, // Must be in the format +1303777777
     needs: String,
     about: String,
     longitude: Number,
