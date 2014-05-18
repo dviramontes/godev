@@ -1,53 +1,50 @@
-<div class="row" style="border-radius:10px;">
-  <div class="col-md-12 text-center titlebar" style="border-radius:10px;">
+<div class="row">
+  <div class="col-md-12 text-center bookend">
     <h1>HOW THE FUCK DO I GIVE SOME HELP</h1>
   </div>
 
   <div class="col-md-12 below">
-    <google-map center="map.center" zoom="map.zoom"/>
+    <google-map center="map.center" zoom="map.zoom" ng-click="openMap()">
+      <marker coords="map.center">
+    </google-map>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-3">
-    &nbsp;
-  </div>
-  <div class="col-md-6 info below">
+  <div class="col-md-12 info below">
     <h3>About</h3>
     {{about}}
   </div>
-    <div class="col-md-3">
-    &nbsp;
+</div>
+
+<div class="row">
+  <div class="col-md-12 info below">
+    <h3>Needs</h3>
+      {{need}}
   </div>
 </div>
 
 <div class="row">
-    <div class="col-md-3">
-    &nbsp;
-  </div>
-  <div class="col-md-6 info below">
-    <h3>Needs</h3>
-      {{need}}
-  </div>
-    <div class="col-md-3">
-    &nbsp;
+  <div class="col-md-12 info below">
+    <h3>Location</h3>
+      {{location}}
   </div>
 </div>
 
-<div class="row below">
+<div class="row bookend below containing">
   <div class="col-md-4">
-    <button class="form-control btn">
-      help
+    <button class="form-control below btn">
+      Help Them
     </button>
   </div>
-    <div class="col-md-4">
-  <button class="form-control btn">
-    dont help
-  </button>
-    </div>
-    <div class="col-md-4">
-  <button class="form-control btn">
-    friends help
-  </button>
-    </div>
+  <div class="col-md-4">
+    <button class="form-control below btn">
+      I Can't Help That Person 
+    </button>
+  </div>
+  <div class="col-md-4">
+    <button class="form-control below btn">
+      My Friends Might Be Able To Help
+    </button>
+  </div>
 </div>
