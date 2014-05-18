@@ -70,7 +70,7 @@ server.put('/tickets', function(req, res, next) {
                     console.log("There was an error. Unable to send text message");
                 } else {
                     // TODO: email or text with link to manage page
-                    twilio.functions.sendText(undefined, undefined, undefined);
+                    messageSender.sendText(undefined, undefined, undefined);
                     res.status(201);
                     res.end();
                 }
