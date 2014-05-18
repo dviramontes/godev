@@ -55,7 +55,7 @@ server.post('/reachout/:ident', function(req, res, next) {
         if (err) throw err;
 
         if (req.body.email && ticket.email) {
-            sendEmail(ticket.email, "donotreply@howcanihelp.com", "We found someone who can help!", req.body.email + " can help you, email them to get in touch then when your need is fulfilled click on 107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
+            sendEmail(ticket.email, "donotreply@howcanihelp.com", "We found someone who can help!", req.body.email + " can help you, email them to get in touch then when your need is fulfilled click on http://107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
         }
 
         console.log(ticket.phoneNumber);
@@ -64,7 +64,7 @@ server.post('/reachout/:ident', function(req, res, next) {
         if (req.body.phoneNumber && ticket.phoneNumber) {
             // twilio
             // to from msg
-            messageSender.sendText(ticket.phoneNumber, twilioNumber, "We found someone who can help!" + req.body.phoneNumber + " can help you, email them to get in touch then when your need is fulfilled click on 107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
+            messageSender.sendText(ticket.phoneNumber, twilioNumber, "We found someone who can help!" + req.body.phoneNumber + " can help you, email them to get in touch then when your need is fulfilled click on http://107.170.192.17:8080/fulfill/" + ticket.auth + " to mark it as fulfilled");
 
         }
 
