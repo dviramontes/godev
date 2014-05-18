@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12 text-center bookend">
-        <h1><a href="#/">HOW DO I GET SOME HELP</a></h1>
+        <h1><a href="#/">HOW DO I GET SOME HELP</a>
+        </h1>
     </div>
 
     <div class="col-md-12 below">
@@ -10,56 +11,55 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-12 info below">
-        <h3>About</h3>
-        <form action="">
-            <div class="form-group">
-                <!-- <label for="exampleInputEmail1">Email address</label> -->
-                <input type="number" class="form-control" id="exampleInputEmail1" ng-model="map.zoom" placeholder="in 140 tell us about your situation..">
-            </div>
-        </form>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12 info below">
-        <h3>Needs</h3>
-        <form action="">
-            <div class="form-group">
-                <!-- <label for="exampleInputEmail1">Email address</label> -->
-                <input type="input" class="form-control" id="exampleInputEmail1" placeholder="tell us about your need, examples vegan baby food, a walker, etc..">
-            </div>
-        </form>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12 info below">
-        <h3>Location</h3>
-        <form action="">
+        <form action="" ng-submit="submit()">
             <div class="form-group">
+                <h3>About</h3>
+                <div class="form-group">
+                    <!-- <label for="exampleInputEmail1">Email address</label> -->
+                    <input type="text" class="form-control" id="exampleInputEmail1" ng-model="about" placeholder="in 140 tell us about your situation..">
+                </div>
+                <h3>Needs</h3>
+                <div class="form-group">
+                    <!-- <label for="exampleInputEmail1">Email address</label> -->
+                    <input type="input" class="form-control" id="exampleInputEmail1" placeholder="tell us about your need, examples vegan baby food, a walker, etc.." ng-model="needs">
+                </div>
+                <h3>Location</h3>
+                <div class="form-group">
+                    <!-- <label for="exampleInputEmail1">Email address</label> -->
+                    <input type="text" class="form-control" id="exampleInputEmail1" ng-model="address" placeholder="Address of where you are staying..">
+                </div>
+                <h3>Prefered Contact</h3>
                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                <input type="text" class="form-control" id="exampleInputEmail1" ng-model="address" placeholder="Address of where you are staying..">
+                <label for="">Email:
+                    <input type="email" class="form-control" id="exampleInputEmail1" ng-model="email" placeholder="user@mail.com" label="dasd" value="choice">
+                </label>
+                <label for="">Phone #:
+                    <input type="phone" class="form-control" id="exampleInputEmail1" ng-model="phoneNumber" placeholder="303-333-1234" label="dasd" value="choice">
+                </label>
+
             </div>
         </form>
     </div>
 </div>
 
 <div class="row bookend below containing">
-    <div class="col-md-4">
-        <button class="form-control below btn">
-            Help Them
+    <div class="col-md-6 col-push-md-3">
+        <button class="form-control below btn" ng-click="submit()">
+            Get Help
         </button>
     </div>
-    <div class="col-md-4">
+<!--     <div class="col-md-4">
         <button class="form-control below btn">
             I Can't Help That Person
         </button>
-    </div>
-    <div class="col-md-4">
+    </div> -->
+<!--     <div class="col-md-4">
         <button class="form-control below btn">
             My Friends Might Be Able To Help
         </button>
-    </div>
+    </div> -->
 </div>

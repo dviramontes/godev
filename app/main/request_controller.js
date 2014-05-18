@@ -53,5 +53,19 @@ angular.module('godev-request', ['ngRoute'])
             // TODO: update map with geotag of new address
         });
 
+        $scope.submit = function(){
+            var payload = {
+                email : $scope.email,
+                phoneNumber : $scope.phoneNumber,
+                about : $scope.about,
+                needs : $scope.needs,
+                address : $scope.address,
+
+            }
+            $http.post('/ticket', payload, function(err, ticket){
+
+            })
+        }
+
 
     });

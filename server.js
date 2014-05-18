@@ -31,10 +31,7 @@ server.use(restify.bodyParser({
     mapParams: false
 }));
 
-// mongoose.connect('mongodb://'+ mongodb.user +':'+ mongodb.pass+'@'+ mongodb.url);
-console.log("Mongo URL is " + mongodb.url);
 mongoose.connect('mongodb://' + mongodb.url);
-
 mongoose.connection.on('open', function() {
     console.log('database opened');
 });
@@ -43,7 +40,6 @@ mongoose.connection.on('error', function(err) {
     if (err) {
         throw err;
     }
-
     console.log(error)
 });
 
@@ -52,32 +48,34 @@ var api_key = sendgridAuth.api.sendgrid.password;
 var sendgrid = require('sendgrid')(api_user, api_key);
 
 server.put('/tickets', function(req, res, next) {
-    crypto.randomBytes(16, function(err, buffer) {
-        if (err) {
-            res.json(500, {
-                err: err.message
-            });
-            console.log("Error in server.js put /tickets" + err.message);
-        } else {
-            var data = req.body;
-            console.log(typeof data);
-            //var data = JSON.parse(req.body);
-            data.auth = buffer.toString('hex');
-            Ticket.create(data, function(err, ticket) {
-                if (err) {
-                    res.json(500, {
-                        err: err.message
-                    });
-                    console.log("There was an error. Unable to send text message");
-                } else {
-                    // TODO: email or text with link to manage page
-                    //messageSender.sendText(undefined, undefined, undefined);
-                    res.status(201);
-                    res.end();
-                }
-            });
-        }
-    });
+   crypto.randomBytes(16, function(err, buffer) {
+       if (err) {
+           res.json(500, {
+               err: err.message
+           });
+           console.log("Error in server.js put /tickets" + err.message);
+       } else {
+
+           console.log(typeof req.body)
+           var data = req.body;
+           // var data = JSON.parse(req.body);
+
+           data.auth = buffer.toString('hex');
+           Ticket.create(data, function(err, ticket) {
+               if (err) {
+                   res.json(500, {
+                       err: err.message
+                   });
+                   console.log("There was an error. Unable to send text message");
+               } else {
+                   // TODO: email or text with link to manage page
+                   messageSender.sendText(undefined, undefined, undefined);
+                   res.status(201);
+                   res.end();
+               }
+           });
+       }
+   });
 });
 
 server.get('/tickets/:id', function(req, res, next) {
@@ -92,20 +90,36 @@ server.get('/tickets/:id', function(req, res, next) {
     });
 });
 
+server.post('/ticket', function(req,res){
+    console.log(req.body)
+    new Ticket.create(req.body, function(err, ticket){
+        if(err) throw err;
+        console.log(ticket);
+    }).save();
+})
 
 server.get('/random', function(req, res, next) {
-    res.json(404, {
-        err: "not written yet"
-    });
-    // TODO: return random ticket data
+
+    // var num = req.params.number;
+    Ticket.find()
+        .limit(1)
+        .skip(Math.floor(Math.random() * 20))
+        .exec(function(err, doc) {
+            if (err) throw err;
+            res.json(200, doc);
+        });
+
 });
 
+
 server.get('/message/:personID', function(req, res) {
+
     Ticket.findOne({
             auth: req.params.personID
         },
         function(err, person) {
             if (!person.phoneNumber) {
+                console.log("IN IF!!");
                 messageSender.sendText(person.phoneNumber, undefined, undefined);
                 return;
             }

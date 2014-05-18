@@ -2,7 +2,6 @@
 
 @color : #F1F2DF;
 
-
 body {
   background-color: #CCCCCC !important;
 }
@@ -35,4 +34,13 @@ button {
 .bookend {
 	background-color: #343444;
 	color: #CCCCCC;
+}
+
+a{
+	color: #CCCCCC;
+	&:hover{
+		color: lighten(#CCCCCC, 10%);
+		text-decoration: none;
+		// color: #CCC100;
+	}
 }
