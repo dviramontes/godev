@@ -22,7 +22,7 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^0.3.0",
     "pem": "^1.4.1",
-    "restify": "^2.8.1",
+    "restify": "^8.4.0",
     "sendgrid": "^1.0.3",
     "twilio": "^1.6.0",
     "twilio-js": "^0.1.1"
